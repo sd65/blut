@@ -1,0 +1,111 @@
+- var needDatePicker=true
+- var needGoogleMaps=true
+include header.jade
+
+.callout.small.secondary
+  .row.column.text-center
+      h1 Proposer un trajet
+        h2.subheader Et oui !
+
+
+form.row.small-11.small-centered.columns
+  h3 Trajet
+  .large-6.small-12.column
+    .input-group
+      span.input-group-label A partir de
+      input#fromInput.input-group-field(type="text")
+    div#fromMap.map
+  .large-6.small-12.column
+    .input-group
+      span.input-group-label Jusqu'à
+      input#toInput.input-group-field(type="text")
+    div#toMap.map
+  hr
+  h3 Aller
+  .small-6.column.large-3.large-offset-3
+    .input-group
+      span.input-group-label Heure
+      select.input-group-field
+        - for (var i = 0; i < 24; ++i)
+          option(value="#{i}") #{i}
+  .small-6.column.large-3.end
+    .input-group
+      span.input-group-label Minutes
+      select.input-group-field
+        - for (var i = 0; i < 60; i+=5)
+          option(value="#{i}") #{i}
+  .small-12.large-6.large-centered.column
+    .input-group
+      span.input-group-label Date
+      input#fromDate.input-group-field(type="text")
+  hr
+  h3 Retour
+  .small-12.column
+    h5 J'effectue un retour
+    .switch
+      input#twoWay.switch-input(type="checkbox", autocomplete="off")
+      label.switch-paddle(for="twoWay")
+    #twoWayDiv(style="display: none")
+      .small-6.column.large-3.large-offset-3
+        .input-group
+          span.input-group-label Heure
+          select.input-group-field
+            - for (var i = 0; i < 24; ++i)
+              option(value="#{i}") #{i}
+      .small-6.column.large-3.end
+        .input-group
+          span.input-group-label Minutes
+          select.input-group-field
+            - for (var i = 0; i < 60; i+=5)
+              option(value="#{i}") #{i}
+      .small-12.large-6.large-centered.column
+        .input-group
+          span.input-group-label Date
+          input#toDate.input-group-field(type="text")
+      // Bug if you remove the following line
+      span 
+  hr
+  h3 Options
+  .small-12.column
+    h5 Je prends l'autoroute
+    .switch
+      input#highway.switch-input(type="checkbox", checked)
+      label.switch-paddle(for="highway")
+  hr
+  .small-12.large-6.large-centered.column
+    button.expanded.button(onclick="submitOffer()") Proposer
+
+  script.
+    function onLoad() {
+       createInputMap("fromInput", "fromMap");
+       createInputMap("toInput", "toMap");
+       $('#twoWay').click(function() {
+         $('#twoWayDiv').toggle(); 
+       });   
+       $("#fromDate, #toDate").fdatepicker({
+         language: "fr", 
+         weekStart: 1,
+         format: "dd/mm/yyyy"
+       });
+    }
+    window.onload = onLoad; 
+  
+    function submitOffer() {
+      var request = new XMLHttpRequest();
+      request.open('POST', '/offer', true);
+      request.setRequestHeader('content-type', 'application/JSON; charset=UTF-8');
+      request.onload = function() {
+          if (request.status == 200) {
+            window.location.href = request.responseText;
+          } else {
+            console.log("error")
+          }
+      };
+      var vfrom = document.getElementById("fromInput").value;
+      var vto = document.getElementById("toInput").value;
+      var vdatetime = document.getElementById("datetime").value;
+      var json = JSON.stringify({from: vfrom, to: vto, datetime: vdatetime});
+      request.send(json);
+    }
+
+include footer.jade

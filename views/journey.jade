@@ -1,0 +1,15 @@
+- var needGoogleMaps=true
+include header.jade
+
+body
+  h1 Trajet
+
+  p De #{journey.from} à #{journey.to} le #{journey.datetime}
+
+  div#map
+  
+  script.
+    function onLoad() {
+       initMap("#{journey.from}", "#{journey.to}");
+    }
+    window.onload = onLoad; 
