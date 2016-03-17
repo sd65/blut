@@ -1,4 +1,6 @@
+var http = require('http');
 var express = require('express');
+var session = require('express-session');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
@@ -10,6 +12,12 @@ var Journey = require('./models/journey.js');
 
 mongoose.connect('mongodb://localhost/test');
 
+app.use(session({
+  secret: 'sd',
+  resave: true,
+  saveUninitialized: true
+}));
+
 app.use('/css', express.static('css'));
 app.use('/js', express.static('js'));
 
@@ -17,7 +25,27 @@ app.set('view engine', 'jade');
 app.set('views', './views');
 
 app.get('/', function (req, res) {
-    res.send('Hello World!');
+    res.render('index', { config: config });
+});
+
+app.get('/login', function (req, res) {
+    if(req.session.user) res.redirect("/");
+    else if (req.query.ticket) {
+      var request = {
+        host: 'https://cas.utc.fr',
+        //port: 443,
+        path: '/cas/serviceValidate?service=' + config.SITE_URL + '&ticket=' + req.query.ticket
+      };
+      http.get(request, function(resp){
+        resp.on('data', function(data){
+          var fullName = data.match(/<cas:cn>([^<]*)<\/cas:cn>/i)[1];
+          req.session.user = fullName;
+        });
+      }).on("error", function(){
+        console.log("Got error:");
+      });
+    }
+    else res.render('login', { config: config });
 });
 
 app.get('/offer', function (req, res) {

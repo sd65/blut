@@ -18,3 +18,8 @@ html, body {
 .fi-arrow-left:before {
   content: "<";
 }
+
+#panel {
+  padding: 100px 0;
+  background: grey;
+}

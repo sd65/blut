@@ -1,6 +1,6 @@
 html
   head
-    title BLUT
+    title #{config.SITE_TITLE} | #{pageTitle}
     link(rel="stylesheet", type="text/css", href="/css/foundation.min.css")
     link(rel="stylesheet", href="/css/main.css")
     meta(name='viewport', content="width=device-width,initial-scale=1.0")
@@ -10,6 +10,11 @@ html
     .top-bar
       .top-bar-left
         ul.menu
-          li.menu-text BLUT
-          li
-            a(href='#') Menu1
+          a(href="/")
+            li.menu-text= config.SITE_TITLE
+      .top-bar-right
+        ul.menu.vertical.medium-horizontal.menu
+          li.button-group.stacked-for-small
+            a.button(href="/me") Mon profil
+            a.button(href="/") Rechercher
+            a.button(href="/offer") Proposer

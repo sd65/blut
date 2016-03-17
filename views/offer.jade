@@ -1,3 +1,4 @@
+- var pageTitle="Proposer"
 - var needDatePicker=true
 - var needGoogleMaps=true
 include header.jade
@@ -86,6 +87,11 @@ form.row.small-11.small-centered.columns
         - for (var i = 0; i < 6; ++i)
           option(value="#{i}") #{i} 
   hr
+  h3 Commentaires
+  .small-12.column.large-6.large-centered
+    .input-group
+      textarea(rows="6")
+  hr
   .small-12.large-6.large-centered.column
     button.expanded.button Proposer
 
@@ -99,7 +105,8 @@ form.row.small-11.small-centered.columns
        $("#date, #returnDate").fdatepicker({
          language: "fr", 
          weekStart: 1,
-         format: "dd/mm/yyyy"
+         format: "dd/mm/yyyy",
+         initialDate: formatedDate()
        });
       $("#addStage").on('click', function() {
           $(".stage:last").clone().insertAfter(".stage:last");
@@ -120,12 +127,15 @@ form.row.small-11.small-centered.columns
     }
       
     function submitOffer() {
+      var day=$("#date").val().split('/')[0]
+      var month=$("#date").val().split('/')[1]
+      var year=$("#date").val().split('/')[2]
+      var datetime=Date(Date.UTC(year, month, day, $("#hour").val(), 
+                                 $("#minute").val(), 0, 0));
       var data = {
         "from": $("#from").val(),  
         "to": $("#to").val(),  
-        "hour": $("#hour").val(),  
-        "minute": $("#minute").val(),  
-        "date": $("#date").val(),  
+        "datetime": datetime,  
         "stage": $("#stage").val(),  
         "twoWay": $("#twoWay").val(),  
         "returnHour": $("#returnHour").val(),  
@@ -139,8 +149,7 @@ form.row.small-11.small-centered.columns
         contentType: "application/JSON; charset=UTF-8",
         data : JSON.stringify(data)      
       }).success(function() {
-        console.log("Success")
-        //window.location.href = request.responseText;
+        window.location.href = request.responseText;
       }).error(function() {
         console.log("error")
       }); 

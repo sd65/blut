@@ -1,0 +1,40 @@
+- var pageTitle="Accueil"
+- var needDatePicker=true
+- var needGoogleMaps=true
+include header.jade
+
+body
+  form#panel.row.small-12.columns.expanded
+    .small-9.small-centered.large-3
+      h1 Quel est votre trajet ?
+      .input-group
+        span.input-group-label A partir de
+        input#from.input-group-field(type="text", autocomplete="off")
+      .input-group
+        span.input-group-label Jusqu'à
+        input#to.input-group-field(type="text", autocomplete="off")
+      .input-group
+        span.input-group-label Date
+        input#date.input-group-field(type="text")
+      a#search.small.expanded.button Rechercher
+  .small-9.small-centered.row
+    h2 Derniers
+
+  script.
+    window.onload = function() {
+       $("#date").fdatepicker({
+         language: "fr", 
+         weekStart: 1,
+         format: "dd/mm/yyyy",
+         initialDate: formatedDate()
+       });
+      $("#from, #to").each(function(index) {
+        var dumb = new google.maps.places.SearchBox(this);
+      });
+      $("form").on('submit', function (e) {
+        e.preventDefault();
+        submitOffer(); 
+      });
+    }
+
+include footer.jade
