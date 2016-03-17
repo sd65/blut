@@ -12,9 +12,14 @@ html
         ul.menu
           a(href="/")
             li.menu-text= config.SITE_TITLE
-      .top-bar-right
-        ul.menu.vertical.medium-horizontal.menu
-          li.button-group.stacked-for-small
-            a.button(href="/me") Mon profil
-            a.button(href="/") Rechercher
-            a.button(href="/offer") Proposer
+      - if (typeof config.USER_FULLNAME !== 'undefined') {
+        .top-bar-right
+          ul.menu.vertical.medium-horizontal.menu
+            li.button-group.stacked-for-small
+              #profileButton.button.dropdown(data-toggle="profileDropdown") #{config.USER_FULLNAME}
+              #profileDropdown.dropdown-pane(data-dropdown="true")
+                  a.button.expanded(href="/me") Mon profil
+                  a.button.expanded(href="/logout") Se déconnecter
+              a.button(href="/") Rechercher
+              a.button(href="/offer") Proposer
+      - }

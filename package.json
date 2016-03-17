@@ -27,7 +27,9 @@
     "mongoose": "^4.4.7"
   },
   "config": {
-    "SITE_TITLE" : "Cap",
+    "SITE_TITLE" : "Captain Covoit",
+    "SITE_URL" : "http://captaincovoit.fr",
+    "CAS_LOGOUT_URL" : "https://webapplis.utc.fr/ent/Logout",
     "GMAPS_API_KEY": "AIzaSyDX4vcSuX16ohaxKA15zdEm7A7BdxO40HI"
   }
 }

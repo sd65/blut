@@ -20,6 +20,25 @@ html, body {
 }
 
 #panel {
+  color: #fff;
   padding: 100px 0;
-  background: grey;
+  background: url("/img/cover.jpg") no-repeat center fixed; 
+  background-size: cover;
+}
+
+/* Menu Hack */
+#profileDropdown {
+  padding: 0;
+}
+
+#profileDropdown a {
+  width: 100%;
+}
+
+.button-group .button {
+      border-right: 0 !important;
+}
+
+#profileButton {
+      line-height: 0.9;
 }

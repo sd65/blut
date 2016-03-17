@@ -4,13 +4,14 @@ include header.jade
 .callout.small.secondary
   .row.column.text-center
       h1 Redirection
-        h2.subheader Connexion au cas UTC
+        h2.subheader Connexion au CAS UTC
 
+script var sd = '#{config.SITE_URL}' 
 script.
 
   setTimeout(function () {
-    window.location.href = "https://cas.utc.fr/cas/login?service=" + config.SITE_URL + "/login";
-  }, 2000);
+    window.location.href = "https://cas.utc.fr/cas/login?service=" + sd + "/login";
+  }, 500);
 
 
 include footer.jade

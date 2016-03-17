@@ -1,4 +1,4 @@
-var http = require('http');
+var https = require('https');
 var express = require('express');
 var session = require('express-session');
 var mongoose = require('mongoose');
@@ -20,29 +20,47 @@ app.use(session({
 
 app.use('/css', express.static('css'));
 app.use('/js', express.static('js'));
+app.use('/img', express.static('img'));
 
 app.set('view engine', 'jade');
 app.set('views', './views');
+
+app.all('*', function(req, res, next){
+  console.log(req.session.user)
+      if(req.session.user) { // Already auth
+        config.USER_FULLNAME=req.session.user;
+        next();
+      } else {
+        if (req.path == "/login") next();
+        else res.redirect("/login");
+      }
+});
 
 app.get('/', function (req, res) {
     res.render('index', { config: config });
 });
 
+app.get('/logout', function (req, res) {
+  req.session.destroy();
+  res.redirect(config.CAS_LOGOUT_URL);
+});
+
 app.get('/login', function (req, res) {
-    if(req.session.user) res.redirect("/");
-    else if (req.query.ticket) {
+    if (req.query.ticket) {
       var request = {
-        host: 'https://cas.utc.fr',
-        //port: 443,
-        path: '/cas/serviceValidate?service=' + config.SITE_URL + '&ticket=' + req.query.ticket
+        hostname: 'cas.utc.fr',
+        port: 443,
+        path: '/cas/serviceValidate?service=' + config.SITE_URL + '/login&ticket=' + req.query.ticket,
       };
-      http.get(request, function(resp){
+      https.get(request, function(resp){
+        resp.setEncoding('utf8');
         resp.on('data', function(data){
           var fullName = data.match(/<cas:cn>([^<]*)<\/cas:cn>/i)[1];
           req.session.user = fullName;
+          res.redirect("/");
         });
-      }).on("error", function(){
-        console.log("Got error:");
+      }).on("error", function(e){
+        console.log("Got error:"+ e);
       });
     }
     else res.render('login', { config: config });
