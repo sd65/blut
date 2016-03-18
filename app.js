@@ -14,8 +14,8 @@ mongoose.connect('mongodb://localhost/test');
 
 app.use(session({
   secret: 'sd',
-  resave: true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use('/css', express.static('css'));
@@ -26,18 +26,21 @@ app.set('view engine', 'jade');
 app.set('views', './views');
 
 app.all('*', function(req, res, next){
-  console.log(req.session.user)
-      if(req.session.user) { // Already auth
+      if(req.session.user == "Sylvain Doignon") {
         config.USER_FULLNAME=req.session.user;
         next();
       } else {
-        if (req.path == "/login") next();
-        else res.redirect("/login");
+        if (req.path.match(/login|welcome/) ) next();
+        else res.redirect("/welcome");
       }
 });
 
 app.get('/', function (req, res) {
     res.render('index', { config: config });
+});
+
+app.get('/welcome', function (req, res) {
+    res.render('welcome', { config: config });
 });
 
 app.get('/logout', function (req, res) {
@@ -55,7 +58,9 @@ app.get('/login', function (req, res) {
       https.get(request, function(resp){
         resp.setEncoding('utf8');
         resp.on('data', function(data){
+          var login = data.match(/<cas:user>([^<]*)<\/cas:user>/i)[1];
           var fullName = data.match(/<cas:cn>([^<]*)<\/cas:cn>/i)[1];
+          req.session.login = login;
           req.session.user = fullName;
           res.redirect("/");
         });
@@ -81,7 +86,7 @@ app.post('/offer', jsonParser, function (req, res) {
     if(!req.body.dry_run)
       journey.save(function(err, obj) {
         if (err) res.status(403).send(err);
-        res.send(req.protocol + '://' + req.get('host') + '/journey/' + obj.id);
+        res.send(config.SITE_URL + '/journey/' + obj.id);
       });
 });
 

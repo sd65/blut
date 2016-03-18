@@ -2,15 +2,22 @@
 - var needGoogleMaps=true
 include header.jade
 
-body
-  h1 Trajet
+.row.small-11.small-centered.columns
+  .large-8.columns
+    h4 #{journey.from} → #{journey.to}
+    p Etapes : None !
+    div#map.map
+    p Détails
+      p Départ #{journey.from}
+      p Arrivée #{journey.to}
+    p Heure :#{journey.datetime}
+    p Date :#{journey.datetime}
+  .large-4.columns
+    p Sd is here
 
-  p De #{journey.from} à #{journey.to} le #{journey.datetime}
+script.
+  window.onload = function() {
+     createJourneyMap("#{journey.from}", "#{journey.to}", "map");
+  }
 
-  div#map
-  
-  script.
-    function onLoad() {
-       initMap("#{journey.from}", "#{journey.to}");
-    }
-    window.onload = onLoad; 
+include footer.jade

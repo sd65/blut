@@ -42,3 +42,8 @@ html, body {
 #profileButton {
       line-height: 0.9;
 }
+
+.button.white {
+  border: 1px solid #FFF;
+  color: #FFF;
+}

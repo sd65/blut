@@ -29,6 +29,7 @@
   "config": {
     "SITE_TITLE" : "Captain Covoit",
     "SITE_URL" : "http://captaincovoit.fr",
+    "ABOUT_URL" : "https://github.com/sd65/blut.git",
     "CAS_LOGOUT_URL" : "https://webapplis.utc.fr/ent/Logout",
     "GMAPS_API_KEY": "AIzaSyDX4vcSuX16ohaxKA15zdEm7A7BdxO40HI"
   }

@@ -86,11 +86,15 @@ form.row.small-11.small-centered.columns
       select#availableSeats.input-group-field
         - for (var i = 0; i < 6; ++i)
           option(value="#{i}") #{i} 
+  .small-12.column.large-6.large-centered
+    .input-group
+      span.input-group-label Prix
+      input#price.input-group-field(type="number", value="5", autocomplete="off")
   hr
   h3 Commentaires
   .small-12.column.large-6.large-centered
     .input-group
-      textarea(rows="6")
+      textarea#comment(rows="6")
   hr
   .small-12.large-6.large-centered.column
     button.expanded.button Proposer
@@ -133,8 +137,12 @@ form.row.small-11.small-centered.columns
       var datetime=Date(Date.UTC(year, month, day, $("#hour").val(), 
                                  $("#minute").val(), 0, 0));
       var data = {
-        "from": $("#from").val(),  
-        "to": $("#to").val(),  
+        "fromLatLng": $("#from").data("latlng"),  
+        "fromFullName": $("#from").data("fullname"),  
+        "fromCity": $("#from").data("city"),  
+        "toLatLng": $("#to").data("latlng"),  
+        "toFullName": $("#to").data("fullname"),  
+        "toCity": $("#to").data("city"),  
         "datetime": datetime,  
         "stage": $("#stage").val(),  
         "twoWay": $("#twoWay").val(),  
@@ -142,14 +150,16 @@ form.row.small-11.small-centered.columns
         "returnMinute": $("#returnMinute").val(),  
         "returnDate": $("#returnDate").val(),  
         "availableSeats": $("#availableSeats").val(),  
+        "comment": $("#comment").val(),  
+        "price": $("#price").val(),  
       };
      $.ajax({
         url: "/offer",
         method: "POST",
         contentType: "application/JSON; charset=UTF-8",
         data : JSON.stringify(data)      
-      }).success(function() {
-        window.location.href = request.responseText;
+      }).success(function(data) {
+        window.location.href = data;
       }).error(function() {
         console.log("error")
       }); 
