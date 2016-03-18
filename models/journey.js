@@ -9,13 +9,17 @@ var journeySchema = new Schema({
     toAddress: String,
     toCity: String,
     datetime: Date,
+    datetimeArrival: Date,
     returnDatetime: Date,
+    returnDatetimeArrival: Date,
     twoWay: Boolean,
     availableSeats: Number,
     price: Number,
     comment: String,
     driverFullName: String,
     driverLogin: String,
+    distance: String,
+    duration: String,
 });
 
 module.exports = mongoose.model('journeySchema', journeySchema);

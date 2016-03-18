@@ -3,6 +3,7 @@ var express = require('express');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var myFunctions = require('./includes/functions.js');
 
 var app = express();
 var config = require('./package.json').config;
@@ -84,13 +85,17 @@ app.post('/offer', jsonParser, function (req, res) {
     journey.toAddress = req.body.toAddress;
     journey.toCity = req.body.toCity;
     journey.datetime = req.body.datetime;
+    journey.datetimeArrival = req.body.datetimeArrival;
     journey.returnDatetime = req.body.returnDatetime;
+    journey.returnDatetimeArrival = req.body.returnDatetimeArrival;
     journey.availableSeats = req.body.availableSeats;
     journey.comment = req.body.comment;
     journey.price = req.body.price;
-    journey.driverFullName = req.session.fullName;
+    journey.driverFullName = req.session.user;
     journey.driverLogin = req.session.login;
     journey.price = req.body.price;
+    journey.distance = req.body.distance;
+    journey.duration = req.body.duration;
     journey.validate(function(err) {
           if (err) res.status(403).send(err);       
     });
@@ -104,7 +109,7 @@ app.post('/offer', jsonParser, function (req, res) {
 app.get('/journey/:journeyId', function (req, res) {
   Journey.findById(req.params.journeyId, function(err, journey) {
     if (err) res.status(404).send(err);
-    res.render('journey', { journey: journey, config: config});
+    res.render('journey', { journey: journey, config: config, myFunctions: myFunctions});
   });
 });
 
