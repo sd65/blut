@@ -40,10 +40,9 @@ form.row.small-11.small-centered.columns
       input#date.input-group-field(type="text")
   hr
   h3 Etapes
-  #stageInput.small-12.column.large-6.large-centered
-   .input-group
+  .small-12.column.large-6.large-centered
+   #stages.input-group(style="display:none")
     span.input-group-label Etape
-    input.stage.input-group-field(type="text", autocomplete="off")
   .small-12.column.large-6.large-centered
     a#addStage.small.expanded.button Ajouter une étape
   hr
@@ -113,42 +112,39 @@ form.row.small-11.small-centered.columns
          initialDate: formatedDate()
        });
       $("#addStage").on('click', function() {
-          $(".stage:last").clone().insertAfter(".stage:last");
-          AddAutocompleteOnStages();
+          $("#stages").show();
+          var i = $("<input/>").addClass("stage input-group-field")
+                  .attr("type", "text").attr("autocomplete","off")
+                  .appendTo("#stages").get(0);
+          new google.maps.places.SearchBox(i);
       });
-      function AddAutocompleteOnStages() {
-        $(".stage").each(function(index) {
-          $(this).off();
-          var dumb = new google.maps.places.SearchBox(this);
-        });
-      }
-      AddAutocompleteOnStages();
       $("form").on('submit', function (e) {
         e.preventDefault();
         submitOffer(); 
       });
 
     }
+
+    function getDatetime(selDate, selHour, selMinute) {
+      var day=$(selDate).val().split('/')[0];
+      var month=$(selDate).val().split('/')[1];
+      var year=$(selDate).val().split('/')[2];
+      return Date(Date.UTC(year, month, day, $(selHour).val(), 
+                                 $(selMinute).val(), 0, 0));
+    }
       
     function submitOffer() {
-      var day=$("#date").val().split('/')[0]
-      var month=$("#date").val().split('/')[1]
-      var year=$("#date").val().split('/')[2]
-      var datetime=Date(Date.UTC(year, month, day, $("#hour").val(), 
-                                 $("#minute").val(), 0, 0));
       var data = {
         "fromLatLng": $("#from").data("latlng"),  
-        "fromFullName": $("#from").data("fullname"),  
+        "fromAddress": $("#from").data("address"),  
         "fromCity": $("#from").data("city"),  
         "toLatLng": $("#to").data("latlng"),  
-        "toFullName": $("#to").data("fullname"),  
+        "toAddress": $("#to").data("address"),  
         "toCity": $("#to").data("city"),  
-        "datetime": datetime,  
+        "datetime": getDatetime("#date", "#hour", "#minute"),  
         "stage": $("#stage").val(),  
         "twoWay": $("#twoWay").val(),  
-        "returnHour": $("#returnHour").val(),  
-        "returnMinute": $("#returnMinute").val(),  
-        "returnDate": $("#returnDate").val(),  
+        "returnDatetime": getDatetime("#returnDate", "#returnHour", "#returnMinute"),  
         "availableSeats": $("#availableSeats").val(),  
         "comment": $("#comment").val(),  
         "price": $("#price").val(),  

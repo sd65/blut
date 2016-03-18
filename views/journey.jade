@@ -1,23 +1,51 @@
-- var pageTitle="Trajet"
+- var pageTitle="Trajet " + journey.fromCity + " à " + journey.toCity
 - var needGoogleMaps=true
 include header.jade
 
 .row.small-11.small-centered.columns
   .large-8.columns
-    h4 #{journey.from} → #{journey.to}
-    p Etapes : None !
+    h2 #{journey.fromCity} → #{journey.toCity}
     div#map.map
-    p Détails
-      p Départ #{journey.from}
-      p Arrivée #{journey.to}
-    p Heure :#{journey.datetime}
-    p Date :#{journey.datetime}
+    table
+      tbody
+        tr
+          td Etapes
+          td None
+        tr
+          td Départ
+          td #{journey.fromAddress}
+        tr
+          td Arrivée
+          td #{journey.toAddress}
+        tr
+          td Heure
+          td #{journey.datetime.toLocaleTimeString("fr-FR")}
+        tr
+          td Date 
+          td #{journey.datetime.toLocaleDateString("fr-FR")}
   .large-4.columns
-    p Sd is here
+    .media-object
+      .media-object-section
+        .thumbnail
+          img(src="http://foundation.zurb.com/sites/docs/assets/img/media-object/avatar-1.jpg")
+      .media-object-section.middle
+        a(href="#{journey.driverLogin}") #{journey.driverFullName}
+    .small-12.columns.row
+      .small-6.columns
+        p #{journey.price}€ par place
+      .small-6.columns
+        p Places restantes
+    a.button.large.expanded(href="") Réserver
+  .small-12.columns
+    h3 Commentaire
+    p #{journey.comment}
+  .small-12.columns
+    h3 Discussion
+    p Bla bla
 
 script.
   window.onload = function() {
-     createJourneyMap("#{journey.from}", "#{journey.to}", "map");
+     createJourneyMap("#{journey.fromAddress}", "#{journey.toAddress}", "map");
   }
 
 include footer.jade

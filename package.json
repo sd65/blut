@@ -27,7 +27,7 @@
     "mongoose": "^4.4.7"
   },
   "config": {
-    "SITE_TITLE" : "Captain Covoit",
+    "SITE_TITLE" : "Cap",
     "SITE_URL" : "http://captaincovoit.fr",
     "ABOUT_URL" : "https://github.com/sd65/blut.git",
     "CAS_LOGOUT_URL" : "https://webapplis.utc.fr/ent/Logout",

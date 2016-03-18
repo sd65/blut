@@ -60,7 +60,7 @@ function getCity(place) {
 function setMapsAttributes(myInput, latLng, fullName, city) {
     var mylatLng = String(latLng).replace("(","[").replace(')',']');
     myInput.setAttribute("data-latlng", mylatLng);
-    myInput.setAttribute("data-fullname", fullName.replace(", France",""));
+    myInput.setAttribute("data-address", fullName.replace(", France",""));
     myInput.setAttribute("data-city", city);
 }
 

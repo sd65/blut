@@ -77,9 +77,20 @@ app.get('/offer', function (req, res) {
 
 app.post('/offer', jsonParser, function (req, res) {
     var journey = new Journey();
-    journey.from = req.body.from;
-    journey.to = req.body.to;
+    journey.fromLatLng = req.body.fromLatLng;
+    journey.fromAddress = req.body.fromAddress;
+    journey.fromCity = req.body.fromCity;
+    journey.toLatLng = req.body.toLatLng;
+    journey.toAddress = req.body.toAddress;
+    journey.toCity = req.body.toCity;
     journey.datetime = req.body.datetime;
+    journey.returnDatetime = req.body.returnDatetime;
+    journey.availableSeats = req.body.availableSeats;
+    journey.comment = req.body.comment;
+    journey.price = req.body.price;
+    journey.driverFullName = req.session.fullName;
+    journey.driverLogin = req.session.login;
+    journey.price = req.body.price;
     journey.validate(function(err) {
           if (err) res.status(403).send(err);       
     });
