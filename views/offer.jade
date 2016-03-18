@@ -1,185 +1,102 @@
-- var pageTitle="Proposer"
-- var needDatePicker=true
-- var needGoogleMaps=true
-include header.jade
+extends ./layout.jade
 
-.callout.small.secondary
-  .row.column.text-center
-      h1 Proposer un trajet
-        h2.subheader J'ai une voiture
+block vars
+  - var pageTitle="Proposer"
+  - var needDatePicker=true
+  - var needGoogleMaps=true
+  - var loadSideScript="offer"
 
-form.row.small-11.small-centered.columns
-  h3 Trajet
-  .large-6.small-12.column
-    .input-group
-      span.input-group-label A partir de
-      input#from.input-group-field(type="text")
-    div#fromMap.map
-  .large-6.small-12.column
-    .input-group
-      span.input-group-label Jusqu'à
-      input#to.input-group-field(type="text")
-    div#toMap.map
-  hr
-  h3 Aller
-  .small-6.column.large-3.large-offset-3
-    .input-group
-      span.input-group-label Heure
-      select#hour.input-group-field
-        - for (var i = 0; i < 24; ++i)
-          option(value="#{i}") #{i}
-  .small-6.column.large-3.end
-    .input-group
-      span.input-group-label Minutes
-      select#minute.input-group-field
-        - for (var i = 0; i < 60; i+=5)
-          option(value="#{i}") #{i}
-  .small-12.large-6.large-centered.column
-    .input-group
-      span.input-group-label Date
-      input#date.input-group-field(type="text")
-  hr
-  h3 Etapes
-  .small-12.column.large-6.large-centered
-   #stages.input-group(style="display:none")
-    span.input-group-label Etape
-  .small-12.column.large-6.large-centered
-    a#addStage.small.expanded.button Ajouter une étape
-  hr
-  h3 Retour
-  .small-12.column
-    h5 J'effectue un retour
-    .switch
-      input#twoWay.switch-input(type="checkbox", autocomplete="off")
-      label.switch-paddle(for="twoWay")
-    #twoWayDiv(style="display: none")
-      .small-6.column.large-3.large-offset-3
-        .input-group
-          span.input-group-label Heure
-          select#returnHour.input-group-field
-            - for (var i = 0; i < 24; ++i)
-              option(value="#{i}") #{i}
-      .small-6.column.large-3.end
-        .input-group
-          span.input-group-label Minutes
-          select#returnMinute.input-group-field
-            - for (var i = 0; i < 60; i+=5)
-              option(value="#{i}") #{i}
-      .small-12.large-6.large-centered.column
-        .input-group
-          span.input-group-label Date
-          input#returnDate.input-group-field(type="text")
-      // Bug if you remove the following line
-      span 
-  hr
-  h3 Options
-  //
+block content
+  .space
+  form.row.small-11.small-centered.columns
+    h1 Proposer un trajet
+    h3 Trajet
+    .large-6.small-12.column
+      .input-group
+        span.input-group-label A partir de
+        input#from.input-group-field(type="text")
+      div#fromMap.map
+    .large-6.small-12.column
+      .input-group
+        span.input-group-label Jusqu'à
+        input#to.input-group-field(type="text")
+      div#toMap.map
+    hr
+    h3 Aller
+    .small-6.column.large-3.large-offset-3
+      .input-group
+        span.input-group-label Heure
+        select#hour.input-group-field
+          - for (var i = 0; i < 24; ++i)
+            option(value="#{i}") #{i}
+    .small-6.column.large-3.end
+      .input-group
+        span.input-group-label Minutes
+        select#minute.input-group-field
+          - for (var i = 0; i < 60; i+=5)
+            option(value="#{i}") #{i}
+    .small-12.large-6.large-centered.column
+      .input-group
+        span.input-group-label Date
+        input#date.input-group-field(type="text")
+    hr
+    h3 Etapes
+    .small-12.column.large-6.large-centered
+     #stages.input-group(style="display:none")
+      span.input-group-label Etape
+    .small-12.column.large-6.large-centered
+      a#addStage.small.expanded.button Ajouter une étape
+    hr
+    h3 Retour
     .small-12.column
-      h5 Je prends l'autoroute
+      h5 J'effectue un retour
       .switch
-        input#highway.switch-input(type="checkbox", checked)
-        label.switch-paddle(for="highway")
-  .small-12.column.large-6.large-centered
-    .input-group
-      span.input-group-label Places disponibles
-      select#availableSeats.input-group-field
-        - for (var i = 0; i < 6; ++i)
-          option(value="#{i}") #{i} 
-  .small-12.column.large-6.large-centered
-    .input-group
-      span.input-group-label Prix
-      input#price.input-group-field(type="number", value="5", autocomplete="off")
-  hr
-  h3 Commentaires
-  .small-12.column.large-6.large-centered
-    .input-group
-      textarea#comment(rows="6")
-  hr
-  .small-12.large-6.large-centered.column
-    button.expanded.button Proposer
-
-  script.
-    window.onload = function() {
-       createInputMap("from", "fromMap");
-       createInputMap("to", "toMap");
-       $('#twoWay').click(function() {
-         $('#twoWayDiv').toggle(); 
-       });   
-       $("#date, #returnDate").fdatepicker({
-         language: "fr", 
-         weekStart: 1,
-         format: "dd/mm/yyyy",
-         initialDate: formatedDate()
-       });
-      $("#addStage").on('click', function() {
-          $("#stages").show();
-          var i = $("<input/>").addClass("stage input-group-field")
-                  .attr("type", "text").attr("autocomplete","off")
-                  .appendTo("#stages").get(0);
-          new google.maps.places.SearchBox(i);
-      });
-      $("form").on('submit', function (e) {
-        e.preventDefault();
-        submitOffer(); 
-      });
-
-    }
-
-    function getDatetime(selDate, selHour, selMinute) {
-      var day=$(selDate).val().split('/')[0];
-      var month=$(selDate).val().split('/')[1];
-      var year=$(selDate).val().split('/')[2];
-      return new Date(year, month, day, $(selHour).val(), $(selMinute).val());
-    }
-      
-    function submitOffer() {
-      var directionsService = new google.maps.DirectionsService;
-      directionsService.route({
-        origin: $("#from").data("address"),
-        destination: $("#to").data("address"),
-        travelMode: google.maps.TravelMode.DRIVING
-      }, function(response, status) {
-        if (status === google.maps.DirectionsStatus.OK) {
-          var distance = response.routes[0].legs[0].distance.text;
-          var duration = response.routes[0].legs[0].duration.text;
-          var durationSeconds = response.routes[0].legs[0].duration.value;
-          var datetime = getDatetime("#date", "#hour", "#minute");
-          var datetimeArrival = new Date(datetime.getTime() + durationSeconds*1000);
-          var returnDatetime = getDatetime("#returnDate", "#returnHour", "#returnMinute");
-          var returnDatetimeArrival = new Date(returnDatetime.getTime() + durationSeconds*1000);
-          var data = {
-            "fromLatLng": $("#from").data("latlng"),  
-            "fromAddress": $("#from").data("address"),  
-            "fromCity": $("#from").data("city"),  
-            "toLatLng": $("#to").data("latlng"),  
-            "toAddress": $("#to").data("address"),  
-            "toCity": $("#to").data("city"),  
-            "datetime": datetime,
-            "datetimeArrival": datetimeArrival,
-            "stage": $("#stage").val(),  
-            "twoWay": $("#twoWay").val(),  
-            "returnDatetime": returnDatetime,  
-            "returnDatetimeArrival": returnDatetimeArrival,  
-            "availableSeats": $("#availableSeats").val(),  
-            "comment": $("#comment").val(),  
-            "price": $("#price").val(),  
-            "distance": distance,
-            "duration": duration
-          };
-         $.ajax({
-            url: "/offer",
-            method: "POST",
-            contentType: "application/JSON; charset=UTF-8",
-            data : JSON.stringify(data)      
-          }).success(function(data) {
-            window.location.href = data;
-          }).error(function() {
-            console.log("error")
-          }); 
-        } else {
-          window.alert("Nous ne pouvons calculer l'itinéraire :" + status);
-        }
-      });
-    }
-
-include footer.jade
+        input#twoWay.switch-input(type="checkbox", autocomplete="off")
+        label.switch-paddle(for="twoWay")
+      #twoWayDiv(style="display: none")
+        .small-6.column.large-3.large-offset-3
+          .input-group
+            span.input-group-label Heure
+            select#returnHour.input-group-field
+              - for (var i = 0; i < 24; ++i)
+                option(value="#{i}") #{i}
+        .small-6.column.large-3.end
+          .input-group
+            span.input-group-label Minutes
+            select#returnMinute.input-group-field
+              - for (var i = 0; i < 60; i+=5)
+                option(value="#{i}") #{i}
+        .small-12.large-6.large-centered.column
+          .input-group
+            span.input-group-label Date
+            input#returnDate.input-group-field(type="text")
+        // Bug if you remove the following line
+        span 
+    hr
+    h3 Options
+    //
+      .small-12.column
+        h5 Je prends l'autoroute
+        .switch
+          input#highway.switch-input(type="checkbox", checked)
+          label.switch-paddle(for="highway")
+    .small-12.column.large-6.large-centered
+      .input-group
+        span.input-group-label Places disponibles
+        select#availableSeats.input-group-field
+          - for (var i = 0; i < 6; ++i)
+            option(value="#{i}") #{i} 
+    .small-12.column.large-6.large-centered
+      .input-group
+        span.input-group-label Prix
+        input#price.input-group-field(type="number", value="5", autocomplete="off")
+    hr
+    h3 Commentaires
+    .small-12.column.large-6.large-centered
+      .input-group
+        textarea#comment(rows="6")
+    hr
+    .small-12.large-6.large-centered.column
+      button.expanded.button Proposer
+    // Bug if you remove the following line                                 
+    span

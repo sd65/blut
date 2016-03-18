@@ -1,0 +1,47 @@
+block vars
+
+doctype html
+html(lang="fr")
+  head
+    title #{config.SITE_TITLE} | #{pageTitle}
+    meta(name='viewport', content="width=device-width,initial-scale=1.0")
+    link(rel="stylesheet", type="text/css", href="/css/dist/foundation.min.css")
+    link(rel="stylesheet", href="/css/main.css")
+    if needDatePicker == true
+      link(rel="stylesheet", href="/css/dist/foundation-datepicker.min.css")
+  body
+    .top-bar
+      .top-bar-left
+        ul.menu
+          a(href="/")
+            li.menu-text= config.SITE_TITLE
+      if (typeof config.USER_FULLNAME !== 'undefined')
+        .top-bar-right
+          ul.menu.vertical.medium-horizontal.menu
+            li.button-group.stacked-for-small
+              #profileButton.button.dropdown(data-toggle="profileDropdown") #{config.USER_FULLNAME}
+              #profileDropdown.dropdown-pane(data-dropdown="true")
+                  a.button.expanded(href="/me") Mon profil
+                  a.button.expanded(href="/logout") Se déconnecter
+              a.button(href="/") Rechercher
+              a.button(href="/offer") Proposer
+
+  block content
+
+  block scripts
+    #scripts
+      script(src='/js/dist/jquery.min.js')
+      script(src='/js/dist/what-input.min.js')
+      script(src='/js/dist/foundation.min.js')
+      script(src='/js/main.js')
+
+      if (typeof loadSideScript !== 'undefined')
+        script(src='/js/#{loadSideScript}.js')
+
+      if needDatePicker == true
+        script(src='/js/dist/foundation-datepicker.min.js')
+        script(src='/js/dist/foundation-datepicker.fr.js')
+
+      if needGoogleMaps == true
+        script(src='/js/gMaps.js')
+        script(src='https://maps.googleapis.com/maps/api/js?key=#{config.GMAPS_API_KEY}&libraries=places')

@@ -1,8 +1,8 @@
 {
-  "name": "blut",
+  "name": "CaptainCovoit",
   "version": "1.0.0",
   "description": "Top secret for now",
-  "main": "map.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,6 +27,8 @@
     "mongoose": "^4.4.7"
   },
   "config": {
+    "PORT": 8080,
+    "COOKIE_SECRET": "sdsd",
     "SITE_TITLE" : "Captain Covoit",
     "SITE_URL" : "http://captaincovoit.fr",
     "ABOUT_URL" : "https://github.com/sd65/blut.git",

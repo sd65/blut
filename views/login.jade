@@ -1,17 +1,14 @@
-- var pageTitle="Login"
-include header.jade
+extends ./layout.jade
 
-.callout.small.secondary
-  .row.column.text-center
-      h1 Redirection
-        h2.subheader Connexion au CAS UTC
+block vars
+  - var pageTitle="Login"
+  - var loadSideScript="login"
 
-script var sd = '#{config.SITE_URL}' 
-script.
+block content
+  .callout.small.secondary
+    .row.column.text-center
+        h1 Redirection
+          h2.subheader Connexion au CAS UTC
 
-  setTimeout(function () {
-    window.location.href = "https://cas.utc.fr/cas/login?service=" + sd + "/login";
-  }, 500);
-
-
-include footer.jade
+block prepend scripts
+  script var SITE_URL = '#{config.SITE_URL}' 
