@@ -25,7 +25,7 @@ app.use(session({
   secret: app.locals.config.COOKIE_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 3600*24*2 }
+  cookie: { maxAge: 24*60*60*1000 }
 }));
 
 // Public dir
@@ -134,8 +134,16 @@ app.post('/offer', jsonParser, function (req, res) {
   });
 });
 
-app.get('/search', jsonParser, function (req, res) {
+app.get('/search', function (req, res) {
   res.render('search', { query: req.query });
+});
+
+app.post('/search', jsonParser, function (req, res) {
+  Journey.find(function(err, journeys) {
+    if (err)
+      res.status(500).send(err);
+    res.json(journeys);
+    }); 
 });
 
 app.get('/journey/:journeyId', function (req, res) {

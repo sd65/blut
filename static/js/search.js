@@ -32,6 +32,7 @@ window.onload = function() {
     submitSearch(); 
   });
   $("#radius option[value=10]").attr("selected", "selected");
+  //getSearchResults();
 }
 
 function submitSearch() {
@@ -43,4 +44,20 @@ function submitSearch() {
   if($("#date").val())
     url +=  "&date" + encodeURIComponent($("#date").val());
   window.location.href = url;
+}
+
+function getSearchResults() {
+  $.ajax({ 
+    type: 'POST', 
+    url: '/search', 
+    data: { get_param: 'value' }, 
+    dataType: 'json',
+    success: function (data) { 
+      $.each(data, function(index, journey) {
+        $('#searchResults').append($('<div>', {
+            text: journey._id
+        }));
+      });
+    }
+  });
 }

@@ -53,12 +53,14 @@ html, body {
   margin-bottom: 2em;
 }
 
-.space {
-  height: 2em;
+#searchOptions {
+  border: 1px solid #f1f1f1;
+  padding-top: 1em;
+  margin-bottom: 2em;
 }
 
-.moreSpace {
-  height: 3em;
+.space {
+  height: 2em;
 }
 
 #book {

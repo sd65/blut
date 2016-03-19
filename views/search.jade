@@ -7,17 +7,21 @@ block vars
   - var needSlider=true
 
 block content
-  .moreSpace
-  .small-12.large-4.columns(style="margin-bottom: 1.5em")
-    .input-group
-      span.input-group-label Date
-      input#date.input-group-field(type="text", autocomplete="off", placeholder="Entrez une date")
-  .small-12.large-4.columns#timeDiv
-    #time
-  .small-12.large-4.columns
-    .input-group
-      span.input-group-label Rayon de recherche
-      select#radius.input-group-field
-        - for (var n of [5,10,20,30,50,100])
-          option(value="#{n}") #{n} Km
-    
+  .space
+  .row.small-11.small-centered.columns
+    h2 #{query.fromCity} → #{query.toCity}
+  #searchOptions.row.small-11.small-centered.columns.border
+    .small-12.large-4.columns(style="margin-bottom: 1.5em")
+      .input-group
+        span.input-group-label Date
+        input#date.input-group-field(type="text", autocomplete="off", placeholder="Entrez une date")
+    .small-12.large-4.columns#timeDiv
+      #time
+    .small-12.large-4.columns
+      .input-group
+        span.input-group-label Rayon de recherche
+        select#radius.input-group-field
+          - for (var n of [5,10,20,30,50,100])
+            option(value="#{n}") #{n} Km
+  #searchResults.row.small-11.small-centered.columns.border RE
+  
