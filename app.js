@@ -5,14 +5,16 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
-// My external functions
-var myFunctions = require('./includes/functions.js');
-
-// Init
+// Init Express
 var app = express();
-var config = require('./package.json').config;
-var port = config.PORT;  
-var jsonParser = bodyParser.json()
+
+// My external functions
+app.locals.myFunctions = require('./includes/functions.js');
+app.locals.config = require('./package.json').config;
+
+// Other init
+var port = app.locals.config.PORT;  
+var jsonParser = bodyParser.json();
 
 // DB
 var Journey = require('./models/journey.js');
@@ -20,9 +22,10 @@ mongoose.connect('mongodb://localhost/test');
 
 // Sessions with Cookies
 app.use(session({
-  secret: config.COOKIE_SECRET,
+  secret: app.locals.config.COOKIE_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { maxAge: 3600*24*2 }
 }));
 
 // Public dir
@@ -35,25 +38,35 @@ app.set('views', './views');
 // Auth system
 app.all('*', function(req, res, next){
   if(req.session.user == "Sylvain Doignon") {
-    config.USER_FULLNAME=req.session.user;
-    next();
+    if (req.session.redirectTo) {
+      var tmp = req.session.redirectTo;
+      req.session.redirectTo = "";
+      res.redirect(tmp);
+    } else {
+      res.locals.USER_FULLNAME=req.session.user;
+      next();
+    }
   } else {
-    if (req.path.match(/login|welcome/) ) next();
-    else res.redirect("/welcome");
+    if (req.path.match(/login|welcome/) ) 
+      next();
+    else {
+      req.session.redirectTo=req.path;
+      res.redirect("/welcome");
+    }
   }
 });
 
 app.get('/', function (req, res) {
-  res.render('index', { config: config });
+  res.render('index');
 });
 
 app.get('/welcome', function (req, res) {
-  res.render('welcome', { config: config });
+  res.render('welcome');
 });
 
 app.get('/logout', function (req, res) {
   req.session.destroy();
-  res.redirect(config.CAS_LOGOUT_URL);
+  res.redirect(app.locals.config.CAS_LOGOUT_URL);
 });
 
 app.get('/login', function (req, res) {
@@ -61,7 +74,7 @@ app.get('/login', function (req, res) {
     var request = {
       hostname: 'cas.utc.fr',
       port: 443,
-      path: '/cas/serviceValidate?service=' + config.SITE_URL 
+      path: '/cas/serviceValidate?service=' + app.locals.config.SITE_URL 
             + '/login&ticket=' + req.query.ticket,
     };
     https.get(request, function(resp){
@@ -76,11 +89,11 @@ app.get('/login', function (req, res) {
     }).on("error", function(e){
       res.redirect("/welcome");
     });
-  } else res.render('login', { config: config });
+  } else res.render('login');
 });
 
 app.get('/offer', function (req, res) {
-  res.render('offer', { config: config });
+  res.render('offer');
 });
 
 app.post('/offer', jsonParser, function (req, res) {
@@ -93,8 +106,11 @@ app.post('/offer', jsonParser, function (req, res) {
   journey.toCity = req.body.toCity;
   journey.datetime = req.body.datetime;
   journey.datetimeArrival = req.body.datetimeArrival;
-  journey.returnDatetime = req.body.returnDatetime;
-  journey.returnDatetimeArrival = req.body.returnDatetimeArrival;
+  journey.twoWay = (req.body.twoWay == 1) ? true : false;
+  if(journey.twoWay) {
+    journey.returnDatetime = req.body.returnDatetime;
+    journey.returnDatetimeArrival = req.body.returnDatetimeArrival;
+  }
   journey.availableSeats = req.body.availableSeats;
   journey.comment = req.body.comment;
   journey.price = req.body.price;
@@ -103,32 +119,37 @@ app.post('/offer', jsonParser, function (req, res) {
   journey.price = req.body.price;
   journey.distance = req.body.distance;
   journey.duration = req.body.duration;
-  journey.validate(function(err) {
-    if (err) res.status(403).send(err);       
+  journey.save(function(err, obj) {
+    if (err) {
+      console.log(err)
+      var message;
+      if (err.name == 'ValidationError') {
+         message = "Vos informations saisies ne sont pas correctes :\n";
+        for (field in err.errors) {
+          message += err.errors[field].message + "\n"; 
+        }
+      } else message = "Erreur";
+      res.status(403).send(message);
+    } else res.send(app.locals.config.SITE_URL + '/journey/' + obj.id);
   });
-  if(!req.body.dry_run)
-    journey.save(function(err, obj) {
-      if (err) res.status(403).send(err);
-      res.send(config.SITE_URL + '/journey/' + obj.id);
-    });
+});
+
+app.get('/search', jsonParser, function (req, res) {
+  res.render('search', { query: req.query });
 });
 
 app.get('/journey/:journeyId', function (req, res) {
   Journey.findById(req.params.journeyId, function(err, journey) {
     if (err)
-      res.render('404', { config: config }); 
-    else res.render('journey', { 
-      journey: journey, 
-      config: config, 
-      myFunctions: myFunctions
-    });
+      res.render('404'); 
+    else res.render('journey', { journey: journey });
   });
 });
 
 app.get('*', function(req, res){
-    res.render('404', { config: config });
+    res.render('404');
 });
 
 app.listen(port, function () {
-  console.log(config.SITE_TITLE + " listening on port " + port + "!");
+  console.log(app.locals.config.SITE_TITLE + " listening on port " + port + "!");
 });

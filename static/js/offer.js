@@ -1,6 +1,9 @@
 window.onload = function() {
-   createInputMap("from", "fromMap");
-   createInputMap("to", "toMap");
+  $("#hour option[value=12]").attr("selected", "selected");
+  $("#returnHour option[value=12]").attr("selected", "selected");
+   
+   createInputMap("from", "fromMap", "go.png");
+   createInputMap("to", "toMap", "red-square.png");
    $('#twoWay').click(function() {
      $('#twoWayDiv').toggle(); 
    });   
@@ -33,6 +36,11 @@ function getDatetime(selDate, selHour, selMinute) {
   
 function submitOffer() {
   var directionsService = new google.maps.DirectionsService;
+  if (typeof $("#from").data("address") == "undefined" 
+      || typeof $("#from").data("address") == "undefined") {
+    alert("Veuillez rentrer une adresse de départ et d'arrivée valide.");
+    return;
+  }
   directionsService.route({
     origin: $("#from").data("address"),
     destination: $("#to").data("address"),
@@ -56,7 +64,7 @@ function submitOffer() {
         "datetime": datetime,
         "datetimeArrival": datetimeArrival,
         "stage": $("#stage").val(),  
-        "twoWay": $("#twoWay").val(),  
+        "twoWay": $("#twoWay").prop('checked'),  
         "returnDatetime": returnDatetime,  
         "returnDatetimeArrival": returnDatetimeArrival,  
         "availableSeats": $("#availableSeats").val(),  
@@ -72,11 +80,11 @@ function submitOffer() {
         data : JSON.stringify(data)      
       }).success(function(data) {
         window.location.href = data;
-      }).error(function() {
-        console.log("error")
+      }).error(function(message) {
+        alert(message.responseText);
       }); 
     } else {
-      window.alert("Nous ne pouvons calculer l'itinéraire :" + status);
+      alert("Nous ne pouvons calculer l'itinéraire :" + status);
     }
   });
 }

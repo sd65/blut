@@ -5,18 +5,33 @@ window.onload = function() {
      format: "dd/mm/yyyy",
      initialDate: ""
    });
-  $("#from, #to").each(function(index) {
-    var el = this;
-    var searchBox = new google.maps.places.SearchBox(this);
-    searchBox.addListener('places_changed', function() {
-      var place = searchBox.getPlaces()[0].geometry.location.toString();
-      el.setAttribute("data-latlng", place);
+   var connectSlider = document.getElementById('time');
+   var format = wNumb({ 
+     decimals: 0,
+     postfix : "h"
     });
+   noUiSlider.create(connectSlider, {
+    start: [8, 19],
+    step: 1,
+    margin: 1,
+    connect: true,
+    tooltips:  [ format, format ],
+    range: {
+      'min': 0,
+      'max': 23
+    },
+    pips: {
+      mode: 'values',
+      values: [0,2,4,6,8,10,12,14,16,18,20,22],
+      density: 4,
+      format: format
+    }
   });
   $("form").on('submit', function (e) {
     e.preventDefault();
     submitSearch(); 
   });
+  $("#radius option[value=10]").attr("selected", "selected");
 }
 
 function submitSearch() {

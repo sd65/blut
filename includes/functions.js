@@ -10,7 +10,7 @@ module.exports = {
 
   formatTime: function (mdate) {
     var date = new Date(mdate);
-    return date.getHours() + "h" + date.getMinutes();
+    return date.getHours() + "h" + ('0' + date.getMinutes()).slice(-2);
   }
 
 };

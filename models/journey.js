@@ -2,24 +2,28 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var journeySchema = new Schema({
-    fromLatLng: Array,
-    fromAddress: String,
-    fromCity: String,
-    toLatLng: Array,
-    toAddress: String,
-    toCity: String,
-    datetime: Date,
-    datetimeArrival: Date,
-    returnDatetime: Date,
-    returnDatetimeArrival: Date,
-    twoWay: Boolean,
-    availableSeats: Number,
-    price: Number,
-    comment: String,
-    driverFullName: String,
-    driverLogin: String,
-    distance: String,
-    duration: String,
+    fromLatLng: { type: Array, required: true },
+    fromAddress: { type: String, required: true },
+    fromCity: { type: String, required: true },
+    toLatLng: { type: Array, required: true },
+    toAddress: { type: String, required: true },
+    toCity: { type: String, required: true },
+    datetime: { type: Date, required: true },
+    datetimeArrival: { type: Date, required: true },
+    twoWay: { type: Boolean, required: true },
+    returnDatetime: { type: Date, required: false, validate : [dateValidator, "La date de retour doit être intérieure à la date de départ" ]},
+    returnDatetimeArrival: { type: Date, required: false },
+    availableSeats: { type: Number, required: true },
+    price: { type: Number, required: true, min : [1, "Le prix doit être supérieur à 1€"] },
+    comment: { type: String, required: false },
+    driverFullName: { type: String, required: true },
+    driverLogin: { type: String, required: true },
+    distance: { type: String, required: true },
+    duration: { type: String, required: true },
 });
+
+function dateValidator(value) {
+      return this.datetime <= value;
+}
 
 module.exports = mongoose.model('journeySchema', journeySchema);

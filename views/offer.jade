@@ -7,6 +7,13 @@ block vars
   - var loadSideScript="offer"
 
 block content
+  mixin optionMinutes
+    - for (var i = 0; i < 60; i+=5)
+      - var j = ('0' + i).slice(-2)
+      option(value="#{j}")= j
+  mixin optionHours
+    - for (var i = 0; i < 24; ++i)
+      option(value="#{i}")= i
   .space
   form.row.small-11.small-centered.columns
     h1 Proposer un trajet
@@ -14,12 +21,12 @@ block content
     .large-6.small-12.column
       .input-group
         span.input-group-label A partir de
-        input#from.input-group-field(type="text")
+        input#from.input-group-field(type="text", placeholder="Entrez un lieu")
       div#fromMap.map
     .large-6.small-12.column
       .input-group
         span.input-group-label Jusqu'à
-        input#to.input-group-field(type="text")
+        input#to.input-group-field(type="text", placeholder="Entrez un lieu")
       div#toMap.map
     hr
     h3 Aller
@@ -27,14 +34,12 @@ block content
       .input-group
         span.input-group-label Heure
         select#hour.input-group-field
-          - for (var i = 0; i < 24; ++i)
-            option(value="#{i}") #{i}
+          +optionHours
     .small-6.column.large-3.end
       .input-group
-        span.input-group-label Minutes
+        span.input-group-label Minute
         select#minute.input-group-field
-          - for (var i = 0; i < 60; i+=5)
-            option(value="#{i}") #{i}
+          +optionMinutes
     .small-12.large-6.large-centered.column
       .input-group
         span.input-group-label Date
@@ -58,14 +63,12 @@ block content
           .input-group
             span.input-group-label Heure
             select#returnHour.input-group-field
-              - for (var i = 0; i < 24; ++i)
-                option(value="#{i}") #{i}
+              +optionHours
         .small-6.column.large-3.end
           .input-group
-            span.input-group-label Minutes
+            span.input-group-label Minute
             select#returnMinute.input-group-field
-              - for (var i = 0; i < 60; i+=5)
-                option(value="#{i}") #{i}
+                +optionMinutes
         .small-12.large-6.large-centered.column
           .input-group
             span.input-group-label Date
@@ -84,7 +87,7 @@ block content
       .input-group
         span.input-group-label Places disponibles
         select#availableSeats.input-group-field
-          - for (var i = 0; i < 6; ++i)
+          - for (var i = 1; i < 6; ++i)
             option(value="#{i}") #{i} 
     .small-12.column.large-6.large-centered
       .input-group
@@ -94,7 +97,7 @@ block content
     h3 Commentaires
     .small-12.column.large-6.large-centered
       .input-group
-        textarea#comment(rows="6")
+        textarea#comment(rows="6", placeholder="Vous pouvez précisez quelque chose sur le trajet.")
     hr
     .small-12.large-6.large-centered.column
       button.expanded.button Proposer

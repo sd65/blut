@@ -57,6 +57,10 @@ html, body {
   height: 2em;
 }
 
+.moreSpace {
+  height: 3em;
+}
+
 #book {
   margin: 0;
 }
@@ -74,4 +78,8 @@ html, body {
 
 .padding {
   padding: 1em 0 1em 1em;
+}
+
+#timeDiv {
+  height: 78px;
 }
