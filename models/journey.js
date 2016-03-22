@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var journeySchema = new Schema({
-    fromLatLng: { type: Array, required: true },
+    fromLatLng: { type: [Number], index: "2d", required: true },
     fromAddress: { type: String, required: true },
     fromCity: { type: String, required: true },
-    toLatLng: { type: Array, required: true },
+    toLatLng: { type: [Number], index: "2d", required: true },
     toAddress: { type: String, required: true },
     toCity: { type: String, required: true },
     datetime: { type: Date, required: true },

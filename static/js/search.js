@@ -3,7 +3,7 @@ window.onload = function() {
      language: "fr", 
      weekStart: 1,
      format: "dd/mm/yyyy",
-     initialDate: ""
+     initialDate: $("#queryDate").text()
    });
    var connectSlider = document.getElementById('time');
    var format = wNumb({ 
@@ -31,8 +31,18 @@ window.onload = function() {
     e.preventDefault();
     submitSearch(); 
   });
+  
+  $("#searchResults").on('click', '.journey', function () {
+    console.log($(this).data("link"));
+    window.location.href = $(this).data("link");
+  });
+
+
   $("#radius option[value=10]").attr("selected", "selected");
-  //getSearchResults();
+  
+  connectSlider.noUiSlider.on('change', getSearchResults);
+  $( "#date, #radius" ).change(getSearchResults);
+  getSearchResults();
 }
 
 function submitSearch() {
@@ -47,17 +57,17 @@ function submitSearch() {
 }
 
 function getSearchResults() {
+  var data = {
+    date: $("#date").val(),
+    time: $("#time").get(0).noUiSlider.get()
+  }
   $.ajax({ 
     type: 'POST', 
     url: '/search', 
-    data: { get_param: 'value' }, 
-    dataType: 'json',
+    contentType: "application/JSON; charset=UTF-8",
+    data : JSON.stringify(data),
     success: function (data) { 
-      $.each(data, function(index, journey) {
-        $('#searchResults').append($('<div>', {
-            text: journey._id
-        }));
-      });
+      $('#searchResults').html(data)
     }
   });
 }

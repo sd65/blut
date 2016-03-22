@@ -74,8 +74,29 @@ html, body {
 #driverPicture {
   width: 100px;
   height: 100px;
+  border-radius: 50px;
   background-position: center;
   background-size: cover;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1em;
+}
+
+.verticalAlign {
+  display: flex;
+  align-items: center;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.journey > div {
+  height : 160px;
 }
 
 .padding {
@@ -84,4 +105,8 @@ html, body {
 
 #timeDiv {
   height: 78px;
+}
+
+.clickable {
+  cursor: pointer;
 }

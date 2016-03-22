@@ -1,3 +1,5 @@
+- function defaultString (s,d) { return (s) ? s : d}
+
 block vars
 
 doctype html
@@ -17,7 +19,7 @@ html(lang="fr")
         ul.menu
           a(href="/")
             li.menu-text= config.SITE_TITLE
-      if (typeof USER_FULLNAME !== 'undefined')
+      if (USER_FULLNAME)
         .top-bar-right
           ul.menu.vertical.medium-horizontal.menu
             li.button-group.stacked-for-small
@@ -37,8 +39,8 @@ html(lang="fr")
       script(src='/js/dist/foundation.min.js')
       script(src='/js/main.js')
 
-      if (typeof loadSideScript !== 'undefined')
-        script(src='/js/#{loadSideScript}.js')
+      if loadSideScript == true
+        script(src="/js/#{filename.split('/').pop().replace('jade', 'js')}")
 
       if needSlider == true
         script(src='/js/dist/nouislider.min.js')

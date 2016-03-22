@@ -31,6 +31,6 @@ function submitSearch() {
     url += "&toCity=" + encodeURIComponent($("#to").data("city"));
   }
   if($("#date").val())
-    url +=  "&date" + encodeURIComponent($("#date").val());
+    url +=  "&date=" + encodeURIComponent($("#date").val());
   window.location.href = url;
 }

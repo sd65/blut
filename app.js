@@ -139,10 +139,29 @@ app.get('/search', function (req, res) {
 });
 
 app.post('/search', jsonParser, function (req, res) {
-  Journey.find(function(err, journeys) {
+  var query = {}
+  var beginTime = 0;
+  var endTime = 23;
+  if(req.body.time) {
+    beginTime = parseInt(req.body.time[0]);
+    endTime = parseInt(req.body.time[1]);
+  }
+  if (req.body.date) {
+    var date = req.body.date.split('/')
+    var beginDay = new Date(date[2], date[1] - 1, date[0], beginTime);
+    var endDay = new Date(date[2], date[1] - 1, date[0], endTime);
+    query.datetime = { 
+      $gte: beginDay,
+      $lt : endDay
+    }
+  }
+  if(req.from) {
+
+  }
+  Journey.find(query).sort({datetime: 'asc'}).exec(function(err, journeys) {
     if (err)
       res.status(500).send(err);
-    res.json(journeys);
+    res.render("_tileJourney", { journeys: journeys });
     }); 
 });
 
