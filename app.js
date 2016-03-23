@@ -50,7 +50,7 @@ app.all('*', function(req, res, next){
     if (req.path.match(/login|welcome/) ) 
       next();
     else {
-      req.session.redirectTo=req.path;
+      req.session.redirectTo=req.url;
       res.redirect("/welcome");
     }
   }
@@ -142,6 +142,18 @@ app.post('/search', jsonParser, function (req, res) {
   var query = {}
   var beginTime = 0;
   var endTime = 23;
+  if(req.body.from) {
+    query.fromLatLng = {
+      $near : req.body.from.split(","),
+      $maxDistance: req.body.radius / 111.12
+    }
+  }
+  if(req.body.to) {
+    query.toLatLng = {
+      $near : req.body.from.split(","),
+      $maxDistance: req.body.radius / 111.12
+    }
+  }
   if(req.body.time) {
     beginTime = parseInt(req.body.time[0]);
     endTime = parseInt(req.body.time[1]);
@@ -155,13 +167,11 @@ app.post('/search', jsonParser, function (req, res) {
       $lt : endDay
     }
   }
-  if(req.from) {
-
-  }
+  console.log(query)
   Journey.find(query).sort({datetime: 'asc'}).exec(function(err, journeys) {
     if (err)
       res.status(500).send(err);
-    res.render("_tileJourney", { journeys: journeys });
+    else res.render("_tileJourney", { journeys: journeys });
     }); 
 });
 

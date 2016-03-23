@@ -37,7 +37,6 @@ window.onload = function() {
     window.location.href = $(this).data("link");
   });
 
-
   $("#radius option[value=10]").attr("selected", "selected");
   
   connectSlider.noUiSlider.on('change', getSearchResults);
@@ -45,21 +44,13 @@ window.onload = function() {
   getSearchResults();
 }
 
-function submitSearch() {
-  var url="/search?"
-  if (typeof $("#from").data("latlng") != 'undefined')
-    url += "from=" + encodeURIComponent($("#from").data("latlng"));
-  if (typeof $("#to").data("latlng") != 'undefined')
-    url += "&to=" + encodeURIComponent($("#to").data("latlng"));
-  if($("#date").val())
-    url +=  "&date" + encodeURIComponent($("#date").val());
-  window.location.href = url;
-}
-
 function getSearchResults() {
   var data = {
     date: $("#date").val(),
-    time: $("#time").get(0).noUiSlider.get()
+    radius: $("#radius").val(),
+    time: $("#time").get(0).noUiSlider.get(),
+    from: $("#queryFrom").text(),
+    to: $("#queryTo").text()
   }
   $.ajax({ 
     type: 'POST', 

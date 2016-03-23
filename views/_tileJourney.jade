@@ -1,20 +1,24 @@
-each journey in journeys
-  .journey.border.row.clickable(data-link="/journey/#{journey._id}")
-      .small-6.medium-4.columns.verticalAlign
-          #driverPicture(style="background-image: url('#{config.USER_PICTURE_BASE_URL + journey.driverLogin}')")
-          a(href="#{journey.driverLogin}")= journey.driverFullName
-      .small-6.medium-4.columns.verticalAlign
-        .margin-auto
-          h5 #{myFunctions.formatDate(journey.datetime)} à #{myFunctions.formatTime(journey.datetime)}
-          h5 #{journey.fromCity} → #{journey.toCity} 
-      .small-12.medium-4.medium-uncentered.small-centered.columns
-        .row
-          .small-6.columns.text-align-center
-            .stat #{journey.price}€ 
-            | par place
-          .small-6.columns.text-align-center
-            .stat #{journey.availableSeats}
-            | places restantes
-        .small-12.columns
-      // Bug if remove 
-      span
+if (journeys)
+  each journey in journeys
+    .journey.border.row.clickable(data-link="/journey/#{journey._id}")
+        .small-6.medium-4.columns.verticalAlign
+            #driverPicture(style="background-image: url('#{config.USER_PICTURE_BASE_URL + journey.driverLogin}')")
+            a(href="#{journey.driverLogin}")= journey.driverFullName
+        .small-6.medium-4.columns.verticalAlign
+          .margin-auto
+            h5 #{myFunctions.formatDate(journey.datetime)} à #{myFunctions.formatTime(journey.datetime)}
+            h5 #{journey.fromCity} → #{journey.toCity} 
+        .small-12.medium-4.medium-uncentered.small-centered.columns
+          .row
+            .small-6.columns.text-align-center
+              .stat #{journey.price}€ 
+              | par place
+            .small-6.columns.text-align-center
+              .stat #{journey.availableSeats}
+              | places restantes
+          .small-12.columns
+        // Bug if remove 
+        span
+else
+  .small-6.medium-4.columns.verticalAlign
+    p Rien

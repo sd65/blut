@@ -10,7 +10,8 @@ window.onload = function() {
     var searchBox = new google.maps.places.SearchBox(this);
     searchBox.addListener('places_changed', function() {
       var place = searchBox.getPlaces()[0];
-      el.setAttribute("data-latlng", place.geometry.location.toString());
+      var mylatLng = String(place.geometry.location.toString()).replace(/[\(\)]/g,"");
+      el.setAttribute("data-latlng", mylatLng);
       el.setAttribute("data-city", getCity(place));
     });
   });
