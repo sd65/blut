@@ -51,7 +51,7 @@ app.all('*', function(req, res, next){
       next();
     else {
       req.session.redirectTo=req.url;
-      res.redirect("/welcome");
+      res.redirect("/login");
     }
   }
 });
@@ -119,6 +119,7 @@ app.post('/offer', jsonParser, function (req, res) {
   journey.price = req.body.price;
   journey.distance = req.body.distance;
   journey.duration = req.body.duration;
+  journey._created_at = new Date();
   journey.save(function(err, obj) {
     if (err) {
       console.log(err)
@@ -140,35 +141,34 @@ app.get('/search', function (req, res) {
 
 app.post('/search', jsonParser, function (req, res) {
   var query = {}
-  var beginTime = 0;
-  var endTime = 23;
+  var limit = app.locals.myFunctions.defaultString(req.body.limit, 100);
+  var sort = { datetime: 'asc' };
+  if (req.body.latest)
+    sort = { _created_at: 'desc' };
   if(req.body.from) {
     query.fromLatLng = {
       $near : req.body.from.split(","),
-      $maxDistance: req.body.radius / 111.12
+      $maxDistance: app.locals.myFunctions.kmToRadius(req.body.radius)
     }
   }
   if(req.body.to) {
     query.toLatLng = {
-      $near : req.body.from.split(","),
-      $maxDistance: req.body.radius / 111.12
+      $near : req.body.to.split(","),
+      $maxDistance: app.locals.myFunctions.kmToRadius(req.body.radius)
     }
   }
-  if(req.body.time) {
-    beginTime = parseInt(req.body.time[0]);
-    endTime = parseInt(req.body.time[1]);
-  }
   if (req.body.date) {
+    var beginTime = parseInt(req.body.time[0]);
+    var endTime = parseInt(req.body.time[1]);
     var date = req.body.date.split('/')
-    var beginDay = new Date(date[2], date[1] - 1, date[0], beginTime);
-    var endDay = new Date(date[2], date[1] - 1, date[0], endTime);
+    beginDay = new Date(date[2], date[1] - 1, date[0], beginTime);
+    endDay = new Date(date[2], date[1] - 1, date[0], endTime);
     query.datetime = { 
       $gte: beginDay,
       $lt : endDay
     }
   }
-  console.log(query)
-  Journey.find(query).sort({datetime: 'asc'}).exec(function(err, journeys) {
+  Journey.find(query).limit(limit).sort(sort).exec(function(err, journeys) {
     if (err)
       res.status(500).send(err);
     else res.render("_tileJourney", { journeys: journeys });

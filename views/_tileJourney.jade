@@ -1,24 +1,25 @@
-if (journeys)
+if (journeys.length > 0)
   each journey in journeys
     .journey.border.row.clickable(data-link="/journey/#{journey._id}")
         .small-6.medium-4.columns.verticalAlign
             #driverPicture(style="background-image: url('#{config.USER_PICTURE_BASE_URL + journey.driverLogin}')")
-            a(href="#{journey.driverLogin}")= journey.driverFullName
+            a(href="/profile/#{journey.driverLogin}")= journey.driverFullName
         .small-6.medium-4.columns.verticalAlign
           .margin-auto
             h5 #{myFunctions.formatDate(journey.datetime)} à #{myFunctions.formatTime(journey.datetime)}
-            h5 #{journey.fromCity} → #{journey.toCity} 
-        .small-12.medium-4.medium-uncentered.small-centered.columns
+            h5.noWordBreak #{journey.fromCity} → !{myFunctions.nonBreakingSpace(journey.toCity)} 
+        .small-12.medium-4.columns
           .row
-            .small-6.columns.text-align-center
+            .small-6.columns.textAlignCenter
               .stat #{journey.price}€ 
               | par place
-            .small-6.columns.text-align-center
+            .small-6.columns.textAlignCenter
               .stat #{journey.availableSeats}
-              | places restantes
+              | place(s) restante(s)
           .small-12.columns
+            span.label Test
         // Bug if remove 
         span
 else
-  .small-6.medium-4.columns.verticalAlign
-    p Rien
+  .columns.verticalAlign
+    p Aucun covoiturage pour le moment.

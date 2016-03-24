@@ -87,11 +87,15 @@ html, body {
   align-items: center;
 }
 
+.noWordBreak {
+  word-break: keep-all;
+}
+
 .margin-auto {
   margin: auto;
 }
 
-.text-align-center {
+.textAlignCenter {
   text-align: center;
 }
 
@@ -99,8 +103,16 @@ html, body {
   height : 160px;
 }
 
+.journey:hover {
+  background: whitesmoke;
+}
+
 .padding {
   padding: 1em 0 1em 1em;
+}
+
+.vertivalMargin {
+  margin: 1em 0;
 }
 
 #timeDiv {
@@ -109,4 +121,48 @@ html, body {
 
 .clickable {
   cursor: pointer;
+}
+
+#footer {
+  background-color: rgb(33, 153, 232);
+  padding: 2em 0px;
+  color: #fff;
+  text-align: center;
+}
+
+#footer a {
+  color: #fff;
+}
+
+#footer ul li {
+  margin-left: 2rem;
+}
+
+#footer h5 {
+  margin-bottom: 1.5em;
+}
+
+.top-bar-left a {
+  color: #fff; 
+}
+
+.top-bar-left  {
+  margin-top: 5px;
+}
+
+.top-bar-left img {
+  padding-bottom: 2px;
+  width: 30px;
+}
+
+.top-bar-left li {
+  display: inline;
+}
+
+.top-bar, .top-bar ul {
+  background-color: #2199e8;
+}
+
+.textShadow {
+  text-shadow: 1px 1px rgb(54, 54, 54);
 }

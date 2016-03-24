@@ -1,5 +1,3 @@
-- function defaultString (s,d) { return (s) ? s : d}
-
 block vars
 
 doctype html
@@ -7,6 +5,7 @@ html(lang="fr")
   head
     title #{config.SITE_TITLE} | #{pageTitle}
     meta(name='viewport', content="width=device-width,initial-scale=1.0")
+    link(rel="icon", type="image/png", href="/img/logo.png")
     link(rel="stylesheet", type="text/css", href="/css/dist/foundation.min.css")
     link(rel="stylesheet", href="/css/main.css")
     if needDatePicker == true
@@ -18,6 +17,7 @@ html(lang="fr")
       .top-bar-left
         ul.menu
           a(href="/")
+            img(src="/img/logo.png")
             li.menu-text= config.SITE_TITLE
       if (USER_FULLNAME)
         .top-bar-right
@@ -29,26 +29,38 @@ html(lang="fr")
                   a.button.expanded(href="/logout") Se déconnecter
               a.button(href="/") Rechercher
               a.button(href="/offer") Proposer
+    block content
 
-  block content
+    #footer.row.expanded
+      .small-4.columns
+        h5 Fait avec amour
+        a A propos
+      .small-4.columns
+        h5 Liens utiles
+        a Aide
+      .small-4.columns
+        h5 Travaillez avec moi
+        a(href="#{config.ABOUT_URL}") Github
+  
+    block scripts
+      #scripts
+        script(src='/js/dist/jquery.min.js')
+        script(src='/js/dist/what-input.min.js')
+        script(src='/js/dist/foundation.min.js')
+        script(src='/js/main.js')
 
-  block scripts
-    #scripts
-      script(src='/js/dist/jquery.min.js')
-      script(src='/js/dist/what-input.min.js')
-      script(src='/js/dist/foundation.min.js')
-      script(src='/js/main.js')
+        if loadSideScript == true
+          script(src="/js/#{filename.split('/').pop().replace('jade', 'js')}")
 
-      if loadSideScript == true
-        script(src="/js/#{filename.split('/').pop().replace('jade', 'js')}")
+        if needSlider == true
+          script(src='/js/dist/nouislider.min.js')
+          script(src='/js/dist/wNumb.js')
+        
+        if needDatePicker == true
+          script(src='/js/dist/foundation-datepicker.min.js')
+          script(src='/js/dist/foundation-datepicker.fr.js')
 
-      if needSlider == true
-        script(src='/js/dist/nouislider.min.js')
-        script(src='/js/dist/wNumb.js')
-      
-      if needDatePicker == true
-        script(src='/js/dist/foundation-datepicker.min.js')
-        script(src='/js/dist/foundation-datepicker.fr.js')
+        if needGoogleMaps == true
+          script(src='https://maps.googleapis.com/maps/api/js?key=#{config.GMAPS_API_KEY}&libraries=places')
 
-      if needGoogleMaps == true
-        script(src='https://maps.googleapis.com/maps/api/js?key=#{config.GMAPS_API_KEY}&libraries=places')
+

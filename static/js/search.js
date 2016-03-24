@@ -27,6 +27,7 @@ window.onload = function() {
       format: format
     }
   });
+  connectSlider.setAttribute('disabled', true);
   $("form").on('submit', function (e) {
     e.preventDefault();
     submitSearch(); 
@@ -38,7 +39,13 @@ window.onload = function() {
   });
 
   $("#radius option[value=10]").attr("selected", "selected");
-  
+    
+  $( "#date" ).change(function() {
+    if ($(this).val())
+      connectSlider.removeAttribute('disabled');
+    else
+      connectSlider.setAttribute('disabled', true);
+  });
   connectSlider.noUiSlider.on('change', getSearchResults);
   $( "#date, #radius" ).change(getSearchResults);
   getSearchResults();

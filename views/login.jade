@@ -5,10 +5,11 @@ block vars
   - var loadSideScript=true
 
 block content
-  .callout.small.secondary
-    .row.column.text-center
-        h1 Redirection
-          h2.subheader Connexion au CAS UTC
+  #panel.fullPage.row.columns.expanded
+    .small-9.small-centered.large-5
+      h1.textShadow Redirection...
+      .progress
+        .progress-meter(style="width: 33%")
 
 block prepend scripts
   script var SITE_URL = '#{config.SITE_URL}' 

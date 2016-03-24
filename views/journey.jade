@@ -9,7 +9,7 @@ block content
   .space
   .row.small-11.small-centered.columns
     .large-12.columns
-      h2 #{journey.fromCity} → #{journey.toCity}
+      h2.noWordBreak #{journey.fromCity} → !{myFunctions.nonBreakingSpace(journey.toCity)}
     .large-8.columns
       div#map.map
       table
@@ -37,12 +37,9 @@ block content
             td= journey.distance
     .large-4.columns
       .border
-        .media-object.noMarginBottom
-          .media-object-section
-            .thumbnail
-              #driverPicture(style="background-image: url('#{config.USER_PICTURE_BASE_URL + journey.driverLogin}')")
-          .media-object-section.middle
-            a(href="#{journey.driverLogin}") #{journey.driverFullName}
+        .columns.verticalAlign.vertivalMargin
+            #driverPicture(style="background-image: url('#{config.USER_PICTURE_BASE_URL + journey.driverLogin}')")
+            a(href="#{journey.driverLogin}")= journey.driverFullName
         .small-12.columns.row
           .small-6.columns
             p 

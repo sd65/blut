@@ -19,6 +19,19 @@ window.onload = function() {
     e.preventDefault();
     submitSearch(); 
   });
+  $("#searchResults").on('click', '.journey', function () {
+    console.log($(this).data("link"));
+    window.location.href = $(this).data("link");
+  });
+  $.ajax({ 
+    type: 'POST', 
+    url: '/search', 
+    contentType: "application/JSON; charset=UTF-8",
+    data : JSON.stringify({ "limit": 5, "latest": true }),
+    success: function (data) { 
+      $('#searchResults').html(data)
+    }
+  });
 }
 
 function submitSearch() {

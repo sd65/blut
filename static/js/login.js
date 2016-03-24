@@ -1,4 +1,10 @@
-// SITE_URL is defined in login.jade
-setTimeout(function () {
-  window.location.href = "https://cas.utc.fr/cas/login?service=" + SITE_URL + "/login";
-}, 500);
+// SITE_URL is set in login.jade
+
+window.onload = function() {
+  $(".progress-meter").css("width", "66%");
+
+  setTimeout(function () {
+    $(".progress-meter").css("width", "90%");
+    window.location.href = "https://cas.utc.fr/cas/login?service=" + SITE_URL + "/login";
+  }, 500);
+}

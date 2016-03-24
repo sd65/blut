@@ -11,6 +11,18 @@ module.exports = {
   formatTime: function (mdate) {
     var date = new Date(mdate);
     return date.getHours() + "h" + ('0' + date.getMinutes()).slice(-2);
+  },
+
+  kmToRadius: function (radius) {
+    return radius / 110;
+  },
+
+  defaultString: function (s,d) { 
+    return (typeof s === 'undefined') ? d : s;
+  },
+
+  nonBreakingSpace: function (s) {
+    return String(s).replace(" ", "&nbsp;");
   }
 
 };

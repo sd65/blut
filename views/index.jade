@@ -7,9 +7,9 @@ block vars
   - var loadSideScript=true
 
 block content
-  form#panel.row.small-12.columns.expanded
-    .small-9.small-centered.large-3
-      h1 Quel est votre trajet ?
+  form#panel.row.expanded
+    .small-11.small-centered.large-4.columns
+      h1.textShadow Quel est votre trajet ?
       .input-group
         span.input-group-label A partir de
         input#from.input-group-field(type="text", autocomplete="off", placeholder="Entrez un lieu")
@@ -20,5 +20,6 @@ block content
         span.input-group-label Date
         input#date.input-group-field(type="text", autocomplete="off", placeholder="Entrez une date")
       button#search.small.expanded.button Rechercher
-  .small-9.small-centered.row
-    h2 Derniers
+  .small-11.small-centered.columns
+    h2.vertivalMargin.textAlignCenter Derniers covoiturages proposés
+    #searchResults.row

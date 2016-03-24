@@ -8,8 +8,9 @@ function formatedNowDate() {
 // Lauch foundation JS
 $(document).foundation();
 
-// Visual Tweak
+// Visual Tweaks
 $("#profileDropdown").css("width", $("#profileButton").innerWidth());
+$(".fullPage").css("min-height", $(window).innerHeight() - $(".top-bar").innerHeight() - $("#footer").innerHeight());
 
 function createInputMap(idInput, idMap, iconName) {
   var defaultPosition = {lat: 49.1, lng: 2.19};

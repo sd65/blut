@@ -9,7 +9,7 @@ block vars
 block content
   .space
   .row.small-11.small-centered.columns
-    h2 #{defaultString(query.fromCity, "*")} → #{defaultString(query.toCity, "*")}
+    h2 #{myFunctions.defaultString(query.fromCity, "*")} → #{myFunctions.defaultString(query.toCity, "*")}
   #searchOptions.row.small-11.small-centered.columns.border
     .small-12.large-4.columns(style="margin-bottom: 1.5em")
       .input-group

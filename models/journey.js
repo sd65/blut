@@ -20,10 +20,11 @@ var journeySchema = new Schema({
     driverLogin: { type: String, required: true },
     distance: { type: String, required: true },
     duration: { type: String, required: true },
+    _created_at: { type: Date, required: true },
 });
 
 function dateValidator(value) {
       return this.datetime <= value;
 }
 
-module.exports = mongoose.model('journeySchema', journeySchema);
+module.exports = mongoose.model('journey', journeySchema);
