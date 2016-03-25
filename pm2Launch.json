@@ -1,0 +1,10 @@
+{
+  "apps" : [{
+    "name"        : "cc",
+    "script"      : "app.js",
+    "watch"       : true,
+    "ignore_watch" : ["node_modules/", "static/", "views/", "README.md"],
+    "exec_mode" : "fork_mode",
+    "instances":"1"
+  }]
+}

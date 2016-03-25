@@ -132,10 +132,7 @@ html, body {
 
 #footer a {
   color: #fff;
-}
-
-#footer ul li {
-  margin-left: 2rem;
+  display: block;
 }
 
 #footer h5 {

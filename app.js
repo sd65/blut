@@ -47,11 +47,11 @@ app.all('*', function(req, res, next){
       next();
     }
   } else {
-    if (req.path.match(/login|welcome/) ) 
+    if (req.path.match(/^\/login|^\/welcome|^\/about/) ) 
       next();
     else {
       req.session.redirectTo=req.url;
-      res.redirect("/login");
+      res.redirect("/welcome");
     }
   }
 });
@@ -62,6 +62,10 @@ app.get('/', function (req, res) {
 
 app.get('/welcome', function (req, res) {
   res.render('welcome');
+});
+
+app.get('/about', function (req, res) {
+  res.render('about');
 });
 
 app.get('/logout', function (req, res) {
@@ -87,6 +91,7 @@ app.get('/login', function (req, res) {
         res.redirect("/");
       });
     }).on("error", function(e){
+      console.log(e)
       res.redirect("/welcome");
     });
   } else res.render('login');
@@ -169,8 +174,7 @@ app.post('/search', jsonParser, function (req, res) {
     }
   }
   Journey.find(query).limit(limit).sort(sort).exec(function(err, journeys) {
-    if (err)
-      res.status(500).send(err);
+    if (err) res.status(500).send(err);
     else res.render("_tileJourney", { journeys: journeys });
     }); 
 });

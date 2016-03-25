@@ -11,7 +11,7 @@ var journeySchema = new Schema({
     datetime: { type: Date, required: true },
     datetimeArrival: { type: Date, required: true },
     twoWay: { type: Boolean, required: true },
-    returnDatetime: { type: Date, required: false, validate : [dateValidator, "La date de retour doit être intérieure à la date de départ" ]},
+    returnDatetime: { type: Date, required: false, validate : [ dateValidator, "La date de retour doit être intérieure à la date de départ" ]},
     returnDatetimeArrival: { type: Date, required: false },
     availableSeats: { type: Number, required: true },
     price: { type: Number, required: true, min : [1, "Le prix doit être supérieur à 1€"] },
